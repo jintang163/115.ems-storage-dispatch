@@ -1,0 +1,19 @@
+# 本地端到端联调 profile（无 PG / Influx 环境使用）：
+#   mvn spring-boot:run -Dspring-boot.run.useTestClasspath=true -Dspring-boot.run.profiles=dev
+# H2 模拟 PG，InfluxDB 降级关闭（遥测仅进最新值缓存），MQTT 连本地 amqtt。
+spring:
+  datasource:
+    url: jdbc:h2:mem:ems;MODE=PostgreSQL;DB_CLOSE_DELAY=-1
+    driver-class-name: org.h2.Driver
+    username: sa
+    password: ""
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+ems:
+  mqtt:
+    enabled: true
+    broker: tcp://127.0.0.1:1883
+  influx:
+    enabled: false

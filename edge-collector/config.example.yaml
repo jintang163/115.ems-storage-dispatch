@@ -1,0 +1,52 @@
+site:
+  id: park-a
+  name: 示范园区 A
+
+gateway:
+  id: gw-001
+
+mqtt:
+  host: localhost
+  port: 1883
+  username: ""
+  password: ""
+  clientId: edge-gw-001
+  topic: ems/park-a/telemetry
+  # HTTP 兜底（MQTT 长时间不可用时启用）
+  httpFailoverUrl: http://localhost:8080/api/v1/ingest/telemetry
+  httpFailoverAfterSec: 30
+  keepaliveSec: 30
+
+collector:
+  pollIntervalSec: 1
+  spoolPath: ./data/spool.db
+  replayBatchSize: 50
+
+# Modbus TCP 设备（电表 / 光伏 / BMS / PCS）
+modbus:
+  - host: localhost
+    port: 5020
+    slaveId: 1
+    deviceId: meter-001
+    deviceType: METER
+  - host: localhost
+    port: 5020
+    slaveId: 2
+    deviceId: pv-001
+    deviceType: PV
+  - host: localhost
+    port: 5020
+    slaveId: 3
+    deviceId: bms-001
+    deviceType: BMS
+  - host: localhost
+    port: 5020
+    slaveId: 4
+    deviceId: pcs-001
+    deviceType: PCS
+
+# MQTT 直连设备（如智能电表），订阅其原生主题并归一化
+mqttDevices:
+  - topic: devices/meter-002/up
+    deviceId: meter-002
+    deviceType: METER

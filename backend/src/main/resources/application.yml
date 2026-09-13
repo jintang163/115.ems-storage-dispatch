@@ -1,0 +1,44 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: ems-dispatch-backend
+  datasource:
+    url: jdbc:postgresql://${PG_HOST:localhost}:${PG_PORT:5432}/${PG_DB:ems}
+    username: ${PG_USER:ems}
+    password: ${PG_PASSWORD:ems12345}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: false
+        jdbc.time_zone: UTC
+
+ems:
+  mqtt:
+    enabled: ${MQTT_ENABLED:true}
+    broker: tcp://${MQTT_HOST:localhost}:${MQTT_PORT:1883}
+    client-id: ems-backend-ingest
+    username: ${MQTT_USER:}
+    password: ${MQTT_PASSWORD:}
+    telemetry-topic: ems/+/telemetry
+    qos: 1
+  influx:
+    enabled: ${INFLUX_ENABLED:true}
+    url: http://${INFLUX_HOST:localhost}:8086
+    org: ems
+    bucket: telemetry
+    token: ${INFLUX_TOKEN:ems-dev-token}
+  # 配置 url 后启用电力公司电价接口定时拉取；默认不配置，使用后台手动电价
+  tariff:
+    remote:
+      # url: https://api.example-power.com/tou/current
+      sync-fixed-delay-ms: 21600000   # 6h
+
+logging:
+  level:
+    com.ems.dispatch: INFO
+    org.eclipse.paho: WARN

@@ -39,3 +39,15 @@ minio-data/
 
 # WeChat Mini Program
 miniprogram_npm/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+.pytest_cache/
+*.db
+edge-collector/data/
+
+# Env
+.env
+*.local
